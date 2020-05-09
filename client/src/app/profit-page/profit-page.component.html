@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col s12">
+        <div class="page-subtitle">
+            <h4>Позиции доходов:</h4>
+            <button 
+            class="waves-effect waves-light btn  btn-small "
+            (click)="onAddProfit()">
+                Добавить позицию дохода
+            </button>
+        </div>
+
+    <div *ngIf="!loading; else loader">
+        <div class="collection" *ngIf="profits.length !==0; else empty" >
+              <a 
+            *ngFor="let profit of profits"
+            class="collection-item collection-item-icon"
+            (click)="onSelectProfit(profit)"
+            >
+                <span>
+                    {{profit.name}} <strong>{{profit.amount| number:'1.2-2'}} руб.</strong>
+                </span>
+                <span>
+                    <i class="material-icons" (click)="onDeleteProfit($event,profit)" >delete</i>
+                </span>
+            </a>
+        </div>
+        <ng-template #empty>
+            <div class="center">
+                Доходов нет. :c
+            </div>
+        </ng-template>
+    </div>    
+    <ng-template #loader>
+        <app-loader></app-loader>
+    </ng-template>
+    
+    </div>
+</div>
+
+<form
+[formGroup]="form" (ngSubmit)="onSubmit()"
+>
+<div class="modal" #modal>
+    <div class="modal-content">
+        <h4 class="mb1">Добавить позицию дохода</h4>
+        <div class="input-field">
+            <input 
+            formControlName="name"
+            id="pos-name" 
+            type="text" 
+            [ngClass]="{'invalid': form.get('name').invalid && form.get('name').touched}"
+            >
+            <label for="pos-name">Источник дохода</label>
+            <span 
+            *ngIf="form.get('name').invalid && form.get('name').touched"
+            class="helper-text red-text">
+        Название источника не должно быть пустым.
+        </span>
+        </div>
+        <div class="input-field">
+            <input 
+            id="pos-amount" type="number" min="1"
+            formControlName="amount"
+            [ngClass]="{'invalid': form.get('amount').invalid && form.get('amount').touched}"
+            >
+            <label for="pos-amount">Величина дохода</label>
+            <span 
+            *ngIf="form.get('amount').invalid && form.get('amount').touched"
+            class="helper-text red-text">
+        Пожалуйста, введите корректную величину. Минимальное значение 0.01
+        </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" 
+        (click)="onCancel()" 
+        class="modal-action waves-effect waves-black btn-flat"
+        [disabled]="form.disabled"
+        >Отмена
+    </button>
+        <button 
+        class="modal-action btn waves-effect" 
+        type="submit"
+        [disabled]="form.disabled || form.invalid"
+        >Сохранить</button>
+    </div>
+</div>
+</form>
+
+
+
+

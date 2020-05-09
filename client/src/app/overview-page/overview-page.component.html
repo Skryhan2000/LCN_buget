@@ -1,0 +1,224 @@
+<div class="page-title">
+    <h3>
+      Обзор за вчера
+      ({{yesterday | date:'dd.MM.yyyy'}})
+      <i class="material-icons black-text pointer" (click)="openInfo()">
+        info_outline
+      </i>
+    </h3>
+  </div>
+  
+  <div
+    class="row"
+    *ngIf="data$ | async as data; else loader"
+  >
+    <div class="col s12 l6">
+      <div class="card light-blue lighten-2 white-text">
+        <div class="card-content">
+          <span class="card-title">Сумма покупок:</span>
+          <h3>{{data.gain.yesterday}} руб.</h3>
+          <h3
+            class="m0 mb1"
+            [ngClass]="{
+              'green-text text-darken-2': !data.gain.isHigher,
+              'red-text': data.gain.isHigher
+            }"
+          >
+            <i class="material-icons">
+              {{data.gain.isHigher ? 'arrow_upward' : 'arrow_downward'}}
+            </i>
+            {{data.gain.percent}}%
+          </h3>
+          <p>
+            Сумма расходов личного бюджта вчера на
+            {{data.gain.percent}}%
+            {{data.gain.isHigher ? 'выше' : 'ниже'}}
+            среднего:
+            {{data.gain.compare}}
+            руб. в день
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col s12 l6">
+      <div class="card orange lighten-2 white-text">
+        <div class="card-content">
+          <span class="card-title">Количество:</span>
+          <h3>{{data.orders.yesterday}} пок.</h3>
+          <h3
+            class="m0 mb1"
+            [ngClass]="{
+              'green-text text-darken-2': !data.orders.isHigher,
+              'red-text': data.orders.isHigher
+            }"
+          >
+            <i class="material-icons">
+              {{data.orders.isHigher ? 'arrow_upward' : 'arrow_downward'}}
+            </i>
+            {{data.orders.percent}}%
+          </h3>
+          <p>
+            Число покупок вчера на {{data.orders.percent}}%
+            {{data.orders.isHigher ? 'выше' : 'ниже'}}
+            среднего значения:
+            {{data.orders.compare}}
+            пок. в день
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loader>
+    <app-loader></app-loader>
+  </ng-template>
+  
+  
+  <div class="tap-target" data-target="menu" #tapTarget>
+    <div class="tap-target-content">
+      <h5>Зачем нужна эта страница?</h5>
+      <p>Страница “Обзор” покажет динамику расходов за предыдущий день. Сравнение со средним значениями поможет вам понять, как идут дела с накоплением.</p>
+    </div>
+  </div>
+
+
+
+  <div class="page-title">
+    <h3>
+      Обзор методов распределения личного бюджета
+     
+    </h3>
+  </div> 
+
+  <div
+  class="row"
+  *ngIf="data$ | async as data; else loader"
+>
+  <div class="col s12">
+    <div class="card  green accent-3 white-text">
+      <div class="card-content">
+        <span class="card-title">Половина–половина
+         </span>
+       
+        <h4>   <h6>Отложить:</h6> 
+          <i class="material-icons">layers</i>
+            {{data.averageProfit/2| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Уложиться:</h6>
+          <i class="material-icons">poll</i>
+           {{data.averageProfit/2 | number:'1.2-2'}} руб.</h4>
+        <p>
+          Самый простой и не самый эффективный метод ведения семейного бюджета. 
+          Подходит тем, кому лень считать. При получении дохода необходимо сразу отложить половину средств в конверт, 
+          банк  или разные банки, на депозиты. И стараться прожить на оставшуюся половину дохода. 
+          Если сумма закончилась, то из оставшихся денег можно взять только половину. И так дальше.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col s12">
+    <div class="card indigo white-text">
+      <div class="card-content">
+        <span class="card-title">Трехшаговая схема. Эндрю Тобиас
+         </span>
+        <h4><h6>Инвестировать или откладывать:</h6> <i class="material-icons">layers</i> {{data.averageProfit*0.2| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Жить в свое удовольствие:</h6> <i class="material-icons">tag_faces</i> {{data.averageProfit*0.8| number:'1.2-2'}} руб.</h4>
+        <p>
+          Избавиться от долгов и всех кредитов, что у вас есть. Инвестировать или откладывать на личный счет 20% своего дохода (НЗ).
+          Жить в свое удовольствие на оставшиеся 80%.
+          
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col  s12">
+    <div class="card  orange lighten-3 white-text">
+      <div class="card-content">
+        <span class="card-title">Все ваше благосостояние
+       </span>
+        <h4><h6>Необходимости:</h6>  <i class="material-icons">poll</i> {{data.averageProfit*0.5| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Желания:</h6> <i class="material-icons">tag_faces</i> {{data.averageProfit*0.3| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Сбережения:</h6>  <i class="material-icons">layers</i> {{data.averageProfit*0.2| number:'1.2-2'}} руб.</h4>
+        <p>
+          Вы одновременно собираете большую сумму, попутно избавляясь от долгов, и живете в свое удовольствие.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col s12">
+    <div class="card light-blue lighten-2 white-text">
+      <div class="card-content">
+        <span class="card-title">Кувшины
+        </span>
+        <h4><h6>Финансовую свобода:</h6><i class="material-icons">lightbulb_outline</i> {{ data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Текущие траты:</h6><i class="material-icons">poll</i> {{data.averageProfit*0.55| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Образовательный счет:</h6> <i class="material-icons">star_border</i> {{data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Резервный фонд:</h6><i class="material-icons">layers</i> {{data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Развлечения:</h6><i class="material-icons">tag_faces</i> {{data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Подарки:</h6><i class="material-icons">redeem</i> {{data.averageProfit*0.05| number:'1.2-2'}} руб.</h4>
+        <p>
+         
+Необходимо разделить сумму на шесть частей и цели, на которые будут в дальнейшем потрачены деньги.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col s12">
+    <div class="card  orange lighten-3 white-text">
+      <div class="card-content">
+        <span class="card-title">Метод 60%. Автор метода, Ричард Дженкинс 
+        </span>
+        <h4><h6>Текущие расходы:</h6> <i class="material-icons">poll</i> {{data.averageProfit*0.6| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Пенсионные накопления:</h6>  <i class="material-icons">layers</i> {{data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Долгосрочные покупки и выплаты:</h6> <i class="material-icons">schedule</i> {{data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Нерегулярные расходы:</h6>  <i class="material-icons">timeline</i> {{data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <h4><h6>Развлечения:</h6>  <i class="material-icons">tag_faces</i> {{data.averageProfit*0.1| number:'1.2-2'}} руб.</h4>
+        <p>
+          Вести детальный учет расходов нет необходимости. Главное вложится в 60%.
+          
+        </p>
+      </div>
+    </div>
+  </div>
+
+ 
+  <div class="col  s12">
+    <div class="card  indigo  white-text">
+      <div class="card-content">
+        <span class="card-title">Четыре конверта</span>
+        <h4>   <h6>Неделя 1:</h6> 
+          <i class="material-icons">poll</i>
+                       
+            {{ data.averageProfit/4 | number:'1.2-2'}} руб.</h4>
+        <h4><h6>Неделя 2:</h6>
+          <i class="material-icons">poll</i>
+          {{ data.averageProfit/4 | number:'1.2-2'}} руб.</h4>
+           <h4>   <h6>Неделя 3:</h6> 
+            <i class="material-icons">poll</i>
+            {{ data.averageProfit/4 | number:'1.2-2'}} руб.</h4>
+          <h4><h6>Неделя 4:</h6>
+            <i class="material-icons">poll</i>
+            {{ data.averageProfit/4 | number:'1.2-2'}} руб.</h4>
+       
+        <p>
+          Вся сумма дохода делится на четыре конверта, то есть на четыре недели. 
+          Это будет лимит расходов на неделю. Но перед всем этим необходимо от поступивших денег отнять обязательные платежи. 
+          А если за неделю потратили меньше, чем в конверте, то остатком воспользуйтесь, как вам угодно.
+        </p>
+      </div>
+    </div>
+  </div>
+
+ 
+ 
+
+ 
+ 
+
+
+</div>

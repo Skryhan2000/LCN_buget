@@ -4,20 +4,28 @@ const Schema = mongoose.Schema;
 const orderSchema = new Schema ({
     date:{
         type: Date,
-        required: true,
-        unique:true
+        default:Date.now
     },
     order:{
-        type: String,
+        type: Number,
         required: true
     },
-    list:{
-        type: this.listenerCount
-    },
+    list:[
+        {
+        name:{
+            type: String
+        },
+        quantity:{
+            type: Number
+        },
+        cost:{
+            type: Number
+        }
+    }],
     user:{
         ref:'users',
         type: Schema.Types.ObjectId
-    }
+    }      
 })
 
 module.exports=mongoose.model('order', orderSchema)

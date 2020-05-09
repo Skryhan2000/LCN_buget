@@ -20,12 +20,12 @@ if(passwordResult){
     })
 }else{
     res.status(401).json({
-        message:'Password are wrong. Try again.'
+        message:'Неверный пароль. Попробуйте еще раз!'
     })
 }
   }else{
       res.status(404).json({
-          message: 'User with such email not found'
+          message: 'Пользователь с таким email не найден.'
       })
   }
 }
@@ -36,7 +36,7 @@ const candidate = await User.findOne({email: req.body.email})
 
 if(candidate){
 res.status(409).json({
-    message: 'Email alredy are used'
+    message: 'Email уже используется.'
 })
 }else{
 const salt=bcrypt.genSaltSync(10)
@@ -46,7 +46,7 @@ const user= new User({
     password: bcrypt.hashSync(password, salt) //шифровка
 })
 try{
-    await user.save().then(()=>console.log('User created.'))
+    await user.save().then(()=>console.log('Пользователь создан.'))
     res.status(201).json(user)
 }catch(e){
     errorHandler(res,e)
